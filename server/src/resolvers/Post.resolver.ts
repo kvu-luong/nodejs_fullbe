@@ -3,9 +3,9 @@ import _pick from 'lodash/pick';
 import _map from 'lodash/map';
 import { ResponseBuilder } from '../helpers/responseBuilder';
 import { ValidateArgs } from '../middlewares/validateResouces';
-import { CreatePostRequestSchema } from '../schema';
+import { CreatePostRequestSchema, UpdateRequestSchema } from '../schema';
 import { logger } from '../helpers/logger';
-import { CreatePostInput, PostMutationResponse, PostQueryAllResponse } from '../types/Post.td';
+import { CreatePostInput, PostMutationResponse, PostQueryAllResponse, UpdatePostInput } from '../types/Post.td';
 import PostEntity from '../services/Post';
 
 @Resolver()
@@ -49,7 +49,6 @@ export class PostResolver {
         context,
         createdAt: new Date(),
       });
-      console.log(Post.insertedId);
       return response
         .setCode(200)
         .setMessage('SUCCESS')
@@ -60,4 +59,23 @@ export class PostResolver {
     }
     return response.setCode(500).setMessage('UNEXPECTED ERROR').build();
   }
+
+  @Mutation(() => Boolean)
+  @ValidateArgs(UpdateRequestSchema)
+  async updatePost(
+    @Arg('updatePostInput', () => UpdatePostInput) { id, title, context }: UpdatePostInput
+  ): Promise<Boolean> {
+    try {
+      const postStatus = await PostEntity.updatePost({
+        title,
+        context,
+        id
+      });
+      return postStatus;
+    } catch (error: any) {
+      logger.error(`Mutation Update Post: ${error.stack}`);
+    }
+    return false;
+  }
+
 }

@@ -14,13 +14,13 @@ export type TPostModel = {
 };
 
 export type TCreatePost = {
-    title: string,
-    context: string,
-    createdAt?: Date,
-}
+  title: string;
+  context: string;
+  createdAt?: Date;
+};
 @ObjectType()
 class CPostResult {
-  @Field(() => String) 
+  @Field(() => String)
   id?: string;
 
   @Field(() => String)
@@ -37,23 +37,34 @@ class CPostResult {
 export class PostMutationResponse implements IMutationResponse {
   code!: number;
   message!: string;
-  @Field(_type =>  CPostResult, { nullable: true })
-  result?:  TResult;
+  @Field((_type) => CPostResult, { nullable: true })
+  result?: TResult;
 }
 @ObjectType({ implements: IMutationResponse })
 export class PostQueryAllResponse implements IMutationResponse {
-    code!: number;
-    message!: string;
-    @Field(_type => [CPostResult] , { nullable: true })
-    result?:  TResult;
-  }
-  
+  code!: number;
+  message!: string;
+  @Field((_type) => [CPostResult], { nullable: true })
+  result?: TResult;
+}
 
 @InputType()
 export class CreatePostInput {
-    @Field(() => String)
-    title!: string
+  @Field(() => String)
+  title!: string;
 
-    @Field(() => String)
-    context!: string
+  @Field(() => String)
+  context!: string;
+}
+
+@InputType()
+export class UpdatePostInput {
+  @Field(() => String)
+  id!: string;
+
+  @Field(() => String)
+  title!: string;
+
+  @Field(() => String)
+  context!: string;
 }

@@ -17,19 +17,14 @@ export const PostModel = {
   getAllPost: async () => {
     try {
       const connectDb = await getDb();
-      let posts = await connectDb.collection(Collection.post).find().toArray();
-      let final;
-      if (posts) {
-        final = _map(posts, (element: TPostModel) => {
-          return {
-            id: element._id,
-            title: element.title,
-            context: element.context,
-            ...(element?.createdAt ? { createdAt: element.createdAt } : {createdAt: new Date()}),
-          };
-        });
-      }
-      return final || [];
+      return (await connectDb.collection(Collection.post).find().toArray()).map((element): TPostModel => {
+        return {
+          id: element._id,
+          title: element['title'],
+          context: element['context'],
+          ...(element?.['createdAt'] ? { createdAt: element['createdAt'] } : {createdAt: new Date()}),
+        };
+      });
     } catch (error: any) {
       throw new Error(error);
     }
@@ -55,8 +50,7 @@ export const PostModel = {
           ...(context ? { context } : {}),
         },
       };
-
-      let result = await connectDb.collection(Collection.user).updateOne(filter, update);
+      let result = await connectDb.collection(Collection.post).updateOne(filter, update);
       if (result.modifiedCount) return true;
       return false;
     } catch (error: any) {

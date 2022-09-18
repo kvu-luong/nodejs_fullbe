@@ -10,7 +10,7 @@ const PostService = {
   getAllPost: (getAllPost: Function): Promise<TPostModel[]> => {
     return getAllPost();
   },
-  updatePostById: (updatePostById: Function, data: TCreatePost & { id: string }): Promise<TPostModel> => {
+  updatePostById: (updatePostById: Function, data: TCreatePost & { id: string }): Promise<Boolean> => {
     return updatePostById(data);
   },
   deletePostById: (deletePostById: Function, id: string): Promise<TPostModel> => {
