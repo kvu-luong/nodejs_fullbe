@@ -119,7 +119,7 @@ https://www.youtube.com/watch?v=wBISkGjwVyo&list=LL&index=1
 4. structure
 - model: function interact directly with data from input data
 - service: handle logic interact with model
-- controller: call some service to handle one logic
+- controller, resolver: call some service to handle one logic
 - schema: schema for db with typescript if we don't use grapql
 - utils: pure function and constants
 - helps: support function like db, log
@@ -184,6 +184,14 @@ destroy session: server will auto get curent session id and deleted in mongodb
 11. Why session not jwt
 https://developer.okta.com/blog/2017/08/17/why-jwts-suck-as-session-tokens
 
+
+
 jwt just in case: server to server, mobile to server, involve many third party to authentication, single sign on
 
 12. rescroll back in nextjs to change position of screen view to previous positon 
+
+
+encrypt page: https://supertokens.com/blog/password-hashing-salting 
+
+cover callback function to promise: https://zellwk.com/blog/converting-callbacks-to-promises/ 
+use in query db mongodb

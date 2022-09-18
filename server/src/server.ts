@@ -1,8 +1,9 @@
 import { Request, Response, Express } from 'express';
 import { ApolloServer } from 'apollo-server-express';
 import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
-import { buildSchema } from 'type-graphql';
 import 'reflect-metadata';
+import { buildSchema } from 'type-graphql';
+
 require("module-alias/register");
 require('dotenv/config');
 import http from 'http';
@@ -13,6 +14,7 @@ const session = require('express-session');
 import { Session, SessionData } from 'express-session';
 import { WHITE_LIST, COOKIE_NAME, __prod__ } from './utils/constants';
 import { UserResolver } from './resolvers/User.resolver';
+import { ContextType } from './types/Context';
 
 
 const app: Express = express();
@@ -46,8 +48,9 @@ app.use(session({
   const server = new ApolloServer({
     schema: await buildSchema({
       resolvers: [UserResolver],
+      validate: false,
     }),
-    context: ({ req, res }) => ({ req, res }),
+    context: ({ req, res }): ContextType => ({ req, res }),
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
   await server.start();

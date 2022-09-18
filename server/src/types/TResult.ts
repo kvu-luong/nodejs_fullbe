@@ -1,0 +1,1 @@
+export type TResult = object[] | string[] | any[] | object | string;

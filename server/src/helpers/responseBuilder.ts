@@ -1,8 +1,8 @@
-type TResult = object[] | string[] | any[] | object | string;
+import { TResult } from "../types/TResult";
 export class ResponseBuilder {
-  message: string | undefined;
-  result: TResult | undefined;
-  code: number | undefined;
+  message!: string;
+  result?: TResult;
+  code!: number;
 
   setCode(code: number) {
     this.code = code;
