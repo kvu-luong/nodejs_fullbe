@@ -39,9 +39,19 @@ export class LoginInput {
     password!: string;
 }
 
+@ObjectType()
+class CResult {
+  @Field(() => String)
+  username?: string;
+
+  @Field(() => String)
+  email?: string;
+}
 @ObjectType({implements: IMutationResponse})
 export class UserMutationResponse implements IMutationResponse {
     code!: number
     message!: string
-    result?: TResult
+
+    @Field(() => CResult, { nullable: true })
+    result?: TResult;
 }

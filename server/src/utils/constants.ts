@@ -1,5 +1,6 @@
 export const Collection = {
   user: 'User',
+  post: 'Posts'
 };
 
 export const logObject = {

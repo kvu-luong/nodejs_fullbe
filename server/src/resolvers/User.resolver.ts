@@ -4,7 +4,7 @@ import UserEntity from '../services/User';
 import { hashPassword, verifyPasswordWithHash } from '../helpers/encrypt';
 import { ResponseBuilder } from '../helpers/responseBuilder';
 import { ValidateArgs } from '../middlewares/validateResouces';
-import { RegisterRequestSchema } from '../schema';
+import { LoginRequestSchema, RegisterRequestSchema } from '../schema';
 import { logger } from '../helpers/logger';
 import { ContextType } from '../types/Context';
 import { COOKIE_NAME } from '../utils/constants';
@@ -37,10 +37,11 @@ export class UserResolver {
     } catch (error: any) {
       logger.error(`Mutation Register: ${error.stack}`);
     }
-    return response.setCode(400).setMessage('UNEXPECTED ERROR').setResult({ username, email }).build();
+    return response.setCode(500).setMessage('UNEXPECTED ERROR').setResult({ username, email }).build();
   }
 
   @Mutation(() => UserMutationResponse)
+  @ValidateArgs(LoginRequestSchema)
   async login(
     @Arg('loginInput', () => LoginInput) { email, password }: LoginInput,
     @Ctx() { req }: ContextType
@@ -61,7 +62,7 @@ export class UserResolver {
     } catch (error: any) {
       logger.error(`Mutation Login: ${error.stack}`);
     }
-    return response.setCode(400).setMessage('UNEXPECTED ERROR').build();
+    return response.setCode(500).setMessage('UNEXPECTED ERROR').build();
   }
 
   @Mutation(() => Boolean)

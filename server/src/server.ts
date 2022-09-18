@@ -13,7 +13,7 @@ const MongoStore = require('connect-mongo');
 const session = require('express-session');
 import { Session, SessionData } from 'express-session';
 import { WHITE_LIST, COOKIE_NAME, __prod__ } from './utils/constants';
-import { UserResolver } from './resolvers/User.resolver';
+import { UserResolver, PostResolver } from './resolvers/index';
 import { ContextType } from './types/Context';
 
 
@@ -47,7 +47,7 @@ app.use(session({
 (async () => {
   const server = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [UserResolver],
+      resolvers: [UserResolver, PostResolver],
       validate: false,
     }),
     context: ({ req, res }): ContextType => ({ req, res }),

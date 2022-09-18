@@ -2,7 +2,7 @@ import { Collection } from '../utils/constants';
 import { getDb } from '../helpers/dbConnect';
 import { RegiserInputType } from '../types/index';
 
-const UserModel = {
+export const UserModel = {
   findOne: async (email: string) => {
     try {
       const connectDb = await getDb();
@@ -19,5 +19,3 @@ const UserModel = {
     return newUser;
   }
 };
-
-export default UserModel;
