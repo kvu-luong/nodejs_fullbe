@@ -78,4 +78,14 @@ export class PostResolver {
     return false;
   }
 
+  @Mutation(() => Boolean)
+  async deletePost(@Arg('id', () => String) id: string): Promise<Boolean> {
+    try{
+      return await PostEntity.deletePost(id);
+    } catch (error: any) {
+      logger.error(`Mutation Delete Post: ${error.stack}`);
+    }
+    return false;
+  }
+
 }

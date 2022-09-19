@@ -13,7 +13,7 @@ const PostService = {
   updatePostById: (updatePostById: Function, data: TCreatePost & { id: string }): Promise<Boolean> => {
     return updatePostById(data);
   },
-  deletePostById: (deletePostById: Function, id: string): Promise<TPostModel> => {
+  deletePostById: (deletePostById: Function, id: string): Promise<Boolean> => {
     return deletePostById(id);
   },
 };

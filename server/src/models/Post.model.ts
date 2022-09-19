@@ -61,9 +61,12 @@ export const PostModel = {
     try {
       const connectDb = await getDb();
       const condition = { _id: new ObjectId(id) };
-      return await connectDb.collection(Collection.post).deleteOne(condition);
+      const objectResult =  await connectDb.collection(Collection.post).deleteOne(condition);
+      console.log(objectResult, 'deletepost');
+      if(objectResult.deletedCount) return true;
     } catch (error: any) {
       throw new Error(error);
     }
+    return false;
   },
 };
