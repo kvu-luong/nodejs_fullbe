@@ -1,4 +1,4 @@
-import { Arg, Mutation, Query, Resolver } from 'type-graphql';
+import { Arg, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql';
 import _pick from 'lodash/pick';
 import _map from 'lodash/map';
 import { ResponseBuilder } from '../helpers/responseBuilder';
@@ -7,6 +7,7 @@ import { CreatePostRequestSchema, UpdateRequestSchema } from '../schema';
 import { logger } from '../helpers/logger';
 import { CreatePostInput, PostMutationResponse, PostQueryAllResponse, UpdatePostInput } from '../types/Post.td';
 import PostEntity from '../services/Post';
+import { checkAuth } from '../middlewares/authentication';
 
 @Resolver()
 export class PostResolver {
@@ -28,9 +29,9 @@ export class PostResolver {
     const response = new ResponseBuilder();
     try {
       const posts = await PostEntity.getAllPost();
-       response.setCode(200).setMessage('SUCCESS').setResult(posts).build();
-       console.log(response, 'mkkk');
-       return response;
+      response.setCode(200).setMessage('SUCCESS').setResult(posts).build();
+      console.log(response, 'mkkk');
+      return response;
     } catch (error: any) {
       logger.error(`Query All Post: ${error.stack}`);
     }
@@ -60,32 +61,36 @@ export class PostResolver {
     return response.setCode(500).setMessage('UNEXPECTED ERROR').build();
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => PostMutationResponse)
   @ValidateArgs(UpdateRequestSchema)
+  @UseMiddleware(checkAuth)
   async updatePost(
     @Arg('updatePostInput', () => UpdatePostInput) { id, title, context }: UpdatePostInput
-  ): Promise<Boolean> {
+  ): Promise<PostMutationResponse> {
+    const response = new ResponseBuilder();
     try {
       const postStatus = await PostEntity.updatePost({
         title,
         context,
-        id
+        id,
       });
-      return postStatus;
+      if(postStatus) return response.setCode(200).setMessage('SUCCESS').setResult({status: true}).build();
     } catch (error: any) {
       logger.error(`Mutation Update Post: ${error.stack}`);
     }
-    return false;
+    return response.setCode(400).setMessage('FAIL').setResult({status: false}).build();;
   }
 
-  @Mutation(() => Boolean)
-  async deletePost(@Arg('id', () => String) id: string): Promise<Boolean> {
-    try{
-      return await PostEntity.deletePost(id);
+  @Mutation(() => PostMutationResponse)
+  @UseMiddleware(checkAuth)
+  async deletePost(@Arg('id', () => String) id: string): Promise<PostMutationResponse> {
+    const response = new ResponseBuilder();
+    try {
+      const deleteStatus =  await PostEntity.deletePost(id);
+      if(deleteStatus) return response.setCode(200).setMessage('SUCCESS').setResult({status: true}).build();
     } catch (error: any) {
       logger.error(`Mutation Delete Post: ${error.stack}`);
     }
-    return false;
+    return response.setCode(400).setMessage('FAIL').setResult({status: false}).build();
   }
-
 }

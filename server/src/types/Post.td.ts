@@ -18,6 +18,7 @@ export type TCreatePost = {
   context: string;
   createdAt?: Date;
 };
+
 @ObjectType()
 class CPostResult {
   @Field(() => String)
@@ -31,6 +32,9 @@ class CPostResult {
 
   @Field(() => Date)
   createdAt?: Date;
+
+  @Field(() => Boolean)
+  status?: Boolean
 }
 
 @ObjectType({ implements: IMutationResponse })
