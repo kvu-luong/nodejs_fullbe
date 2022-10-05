@@ -16,7 +16,6 @@ import { WHITE_LIST, COOKIE_NAME, __prod__ } from './utils/constants';
 import { UserResolver, PostResolver } from './resolvers/index';
 import { ContextType } from './types/Context';
 
-
 const app: Express = express();
 app.use(
   cors({

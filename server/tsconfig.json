@@ -39,6 +39,7 @@
     "paths": {
       "*": ["node_modules/*", "src/*"],
       "@root/*": ["src/*"],
+      "@router/*": ["src/router/*"],
       "@config/*": ["src/config/*"],
       "@models/*": ["src/models/*"],
       "@router/*": ["src/router/*"],
